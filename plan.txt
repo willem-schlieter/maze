@@ -1,0 +1,11 @@
+Objektorientiert!
+
+Klasse Maze:
+	rekursuive_division
+	senkrechte Wände: matrix mit x-1 listen mit y bools
+	waagerechte Wände: matrix mit y-1 listen mit x bools
+
+	Funktion __init__: Initialisieren eines leeren Labyrinthes mit x und y
+	Funktion recreate(empty: bool): entferne alte daten, bei false neu div
+	Funktion div(pos: tupel, br: int, ho:int): zufällige wand einfügen, zerteile teilbereiche weiter mit div (außer bei br bzw. ho == 1)
+	Funktion show_maze(): Labyrinth in Textform ausgeben (MIT Außenwänden)
