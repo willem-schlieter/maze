@@ -1,0 +1,26 @@
+Klasse Maze
+
+Ein Objekt dieser Klasse ist ein Labyrinth, welches seine Größe und Innenwände speichert.
+
+__init__(self, x: int, y: int):
+	Erschafft ein neues Objekt, welches die Größe x * y besitzt. __init__ -Funktion der Klasse.
+
+__str__(self) -> str:
+	Die Wände werden als String in Textform zurückgegeben. Zunächst die Horizontalen Wände, danach die Vertikalen Wände (in einer Liste). Eine Wand besteht aus Booleans, wobei True für ein Wandsegment steht.
+
+__repr__(self) -> str:
+	Zeigt das ganze Objekt (Labyrinth) in Textform ("+", "-", "|") an. Dabei werden die Außenwände mit einbezogen, welche nicht im Objekt gespeichert weren, da sie immer vorhanden sind.
+	Zurückgegeben wird der Wert als String mit Zeilenumbrüchen.
+
+recreate(self, empty: bool = False):
+	Erschafft ein neues Labyrinth, welches vollständig neu mit Wänden audgefüllt wird, sodass es von einem Punkt zu einem anderen nur einen Weg gibt.
+	Wenn der Wert True übergeben wird, ist das Labyrinth (die Wände des Objektes) danach alle offen/leer.
+
+div(self, pos: tuple, x: int, y: int):
+	Zerteilt einen Bereich mit einer zufälligen Wand (ein zufälliges Feld ist die Tür/der Durchgang). Danach wird in beiden zerteilten Bereichen diese Funktion wieder aufgerufen.
+	Der Bereich befindet sich von der Postion oben links gesehen (Tupel pos) mit Breite x und Höhe y. Er wird nicht zerteilt, wenn Breite oder Höhe kleiner gleich 1 sind.
+	Es werden Fehler ausgegeben, wenn sich der angegebene nicht komplett innerhalb des Labyrinthes befindet (IndexError) oder Breite bzw. Höhe kleiner als 1 sind (ValueError).
+
+shortest_way(self, a: tuple, b: tuple) -> int:
+	Ermittelt den Kürzesten Weg von Punkt A nach B im Labyrinth (Wände liegen zwischen den Punkten). Gibt einen Integer-Wert aus.
+	Wenn Punkt a oder Punkt b nicht enthalten sind, wird ein IndexError ausgegeben. Außerdem können hier bei mehreren möglichen Wegen Rekursionsfehler auftreten.

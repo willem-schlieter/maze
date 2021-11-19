@@ -1,0 +1,5 @@
+- Grundfunktionen des Labyrinthes erstellt
+- Ausgabe als reine Daten der Wände oder als Textbesiertes Labyrinth
+- Fehlerausgabe bei falschen Daten
+- Erstellung von Changelogs und weiteren informellen Dateien
+- .gitignore erstellt
