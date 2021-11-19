@@ -37,5 +37,6 @@ class Maze:
                 self.div(pos, x, wall + 1)                                                          # Rekursion mit oberem Teilbereich
                 self.div((pos[0], pos[1] + wall + 1), x, y - wall - 1)                              # Rekursion mit unterem Teilbereich
 
-# kleiner Kommentar :-)
+    def shortest_way(self, A: tuple, B: tuple) -> int:
+        pass
 
