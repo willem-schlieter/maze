@@ -9,5 +9,3 @@ Klasse Maze:
 	Funktion recreate(empty: bool): entferne alte daten, bei false neu div
 	Funktion div(pos: tupel, br: int, ho:int): zufällige wand einfügen, zerteile teilbereiche weiter mit div (außer bei br bzw. ho == 1)
 	Funktion show_maze(): Labyrinth in Textform ausgeben (MIT Außenwänden)
-
-(kleiner zweiter Kommentar (-: )
