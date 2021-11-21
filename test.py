@@ -3,15 +3,12 @@
 from maze import Maze;
 from time import time;
 
-t0 = time();
+for i in range (10, 1000, 100):
+    t0 = time();
+    m = Maze(i, i)
+    t1 = time();
+    m.recreate();
+    t2 = time();
 
-m = Maze(200, 100)
-
-t1 = time();
-
-m.recreate();
-
-t2 = time();
-
-print("Maze initialized in: " + t1 - t0);
-print("Maze recreated in: " + t2 - t1);
+    print("Maze (size: {}) initialized in: {}".format(i, t1 - t0));
+    print("Maze (size: {}) recreated in: {}".format(i, t2 - t1));
