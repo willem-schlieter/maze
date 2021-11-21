@@ -1,11 +1,13 @@
 import random
 
 class Maze:
-    def __init__(self, x: int, y: int):
+    def __init__(self, x: int, y: int, fill: bool = False):
         self.x = x
         self.y = y
         self.hw = [[False for j in range(self.x)] for i in range(self.y - 1)]                       # Erstellung der Matrix für horizontale Wände
         self.vw = [[False for j in range(self.y)] for i in range(self.x - 1)]                       # vertikale Wände
+        if (fill):                                                                                  # optionales Füllen des Labyrinthes
+            self.recreate()
 
     def __str__(self):
         return str((self.hw, self.vw))
@@ -73,23 +75,23 @@ class Maze:
 
         if (a == b):                                                                                # Ziel erreicht
             return 0
-        else:
-            d = -1
+        else:                                                                                       # es gibt nur einen Weg, deshalb ist bei einem Weg dieser sofort richtig
+            d = 0
             if (a[0] > 0 and (a[0] - 1, a[1]) != n and not self.vw[a[0] - 1][a[1]]):                # nach links
-                e = self.shortest_way((a[0] - 1, a[1]), b, a) + 1
-                if (e):
-                    d = e
+                d = self.shortest_way((a[0] - 1, a[1]), b, a) + 1
+                if (d > 0):
+                    return d
             if (a[0] < self.x - 1 and (a[0] + 1, a[1]) != n and not self.vw[a[0]][a[1]]):           # nach rechts
-                e = self.shortest_way((a[0] + 1, a[1]), b, a) + 1
-                if (e and (e < d or d == -1)):
-                    d = e
+                d = self.shortest_way((a[0] + 1, a[1]), b, a) + 1
+                if (d > 0):
+                    return d
             if (a[1] > 0 and (a[0], a[1] - 1) != n and not self.hw[a[1] - 1][a[0]]):                # nach oben
-                e = self.shortest_way((a[0], a[1] - 1), b, a) + 1
-                if (e and (e < d or d == -1)):
-                    d = e
+                d = self.shortest_way((a[0], a[1] - 1), b, a) + 1
+                if (d > 0):
+                    return d
             if (a[1] < self.y - 1 and (a[0], a[1] + 1) != n and not self.hw[a[1]][a[0]]):           # nach unten
-                e = self.shortest_way((a[0], a[1] + 1), b, a) + 1
-                if (e and (e < d or d == -1)):
-                    d = e
-            return d
+                d = self.shortest_way((a[0], a[1] + 1), b, a) + 1
+                if (d > 0):
+                    return d
+            return -1
 

@@ -1,0 +1,2 @@
+- Funktion shortest_way verbessert, sodass weniger Rechenzeit benötigt wird: wenn ein Weg gefunden wird, ist dieser automatisch der Richtige
+- (optionale) Fill-Option in der __init__-Funktion

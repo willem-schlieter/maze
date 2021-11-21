@@ -2,8 +2,9 @@ Klasse Maze
 
 Ein Objekt dieser Klasse ist ein Labyrinth, welches seine Größe und Innenwände speichert.
 
-__init__(self, x: int, y: int):
+__init__(self, x: int, y: int, fill: bool = False):
 	Erschafft ein neues Objekt, welches die Größe x * y besitzt. __init__ -Funktion der Klasse.
+	Optional "fill" (boolean), bei True wird das Labyrinth sofort mit Wänden gefüllt.
 
 __str__(self) -> str:
 	Die Wände werden als String in Textform zurückgegeben. Zunächst die Horizontalen Wände, danach die Vertikalen Wände (in einer Liste). Eine Wand besteht aus Booleans, wobei True für ein Wandsegment steht.
