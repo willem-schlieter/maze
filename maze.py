@@ -95,3 +95,34 @@ class Maze:
                     return d
             return -1
 
+    def save(self, path: str):
+        data = [boo for row in self.hw for boo in row] + [boo for row in self.vw for boo in row];
+        intarray = [self.x, self.y] + [int("".join([str(c) for c in a]), 2) for a in [[int(data.pop(0)) for j in range(8) if data] for i in range(0, len(data), 8)]];
+        print(intarray)
+        f = open(path, "wb");
+        f.write(bytes(intarray));
+        f.close();
+
+    def from_file(path):
+        if (type(path) == Maze): raise TypeError("from_file is a static method.");
+        f = open(path, "rb");
+        intarray = list(f.read());
+        print(intarray)
+        f.close();
+
+        maze = Maze(intarray.pop(0), intarray.pop(0), False);
+
+        data = [item for sublist in [[bool(int(n)) for n in list(bin(i)[2:])] for i in intarray] for item in sublist];
+        while (len(data) < ((maze.x - 1) * maze.y + (maze.y - 1) * maze.x)):
+            data.insert(False, 0)
+        print(data);
+
+        maze.hw = [[bool(data.pop(0)) for i in range(maze.y) if data] for i in range(maze.x - 1)];
+        maze.vw = [[bool(data.pop(0)) for i in range(maze.x) if data] for i in range(maze.y - 1)];
+        return maze;
+
+    def __eq__(self, other):
+        if (type(other) == type(self)):
+            return self.hw == other.hw and self.vw == other.vw;
+        else:
+            return NotImplemented;
