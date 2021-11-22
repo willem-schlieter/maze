@@ -1,0 +1,4 @@
+TODO-Liste für den Branch walkable-maze:
+
+1.) Eingang (Position): (0,0) oder festgelegte Postition, mit Ausgang der am weitesten davon entfernt ist -> Anzeige im Plan des Labyrinthes
+2.) Anzeige einzelner Teile des Labyrinthes
