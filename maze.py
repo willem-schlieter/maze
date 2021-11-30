@@ -121,6 +121,17 @@ class Maze:
         maze.vw = [[bool(data.pop(0)) for i in range(maze.x) if data] for i in range(maze.y - 1)];
         return maze;
 
+    def walls(self, x, y):
+        if (x not in range(self.x) or y not in range(self.y)):
+            raise IndexError('The given field does not exist in the maze.')
+        else:
+            return (
+                self.hw[y - 1][x] if y else True,
+                self.vw[x][y] if x + 1 < self.x else True,
+                self.hw[y][x] if y + 1 < self.y else True,
+                self.vw[x - 1][y] if x else True
+            );
+
     def __eq__(self, other):
         if (type(other) == type(self)):
             return self.hw == other.hw and self.vw == other.vw;

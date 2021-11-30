@@ -5,8 +5,9 @@ from maze import Maze;
 DIM = (30, 20);
 FELDBREITE = 20;
 WANDBREITE = 10;
+HGFARBE = "#ec4545"
 WANDFARBE = "#000000";
-STEINFARBE = "#0077ff";
+STEINFARBE = "#4caf50";
 FENSTER = ((FELDBREITE + WANDBREITE) * DIM[0] + WANDBREITE, (FELDBREITE + WANDBREITE) * DIM[1] + WANDBREITE);
 
 # class Stein_Position:
@@ -21,6 +22,7 @@ FENSTER = ((FELDBREITE + WANDBREITE) * DIM[0] + WANDBREITE, (FELDBREITE + WANDBR
 #             self.x += other[0];
 #             self.y += other[1];
 STEIN = [0, 5];
+key_helper = (pg.K_UP, pg.K_RIGHT, pg.K_DOWN, pg.K_LEFT);
 
 screen = pg.display.set_mode(FENSTER);
 uhr = pg.time.Clock();
@@ -35,7 +37,7 @@ def wand (x: int, y: int, h: bool):
     pg.draw.rect(screen, WANDFARBE, (x, y, FELDBREITE if h else WANDBREITE, WANDBREITE if h else FELDBREITE));
 
 def render ():
-    screen.fill((0x4C, 0xAF, 0x50));
+    screen.fill(HGFARBE);
     # RÄNDER
     # oben
     pg.draw.rect(screen, WANDFARBE, (0, 0, FENSTER[0], WANDBREITE));
@@ -77,9 +79,12 @@ while weiter:
     for e in pg.event.get():
         if (e.type == pg.QUIT): weiter = False;
         elif (e.type == pg.KEYDOWN):
-            print(e.key);
-            STEIN[0] += 1 if e.key == pg.K_RIGHT else -1 if e.key == pg.K_LEFT else 0;
-            STEIN[1] += 1 if e.key == pg.K_DOWN else -1 if e.key == pg.K_UP else 0;
+            w = maze.walls(*STEIN);
+            if (e.key == pg.K_UP and not w[0]): STEIN[1] -= 1;
+            elif (e.key == pg.K_RIGHT and not w[1]): STEIN[0] += 1;
+            elif (e.key == pg.K_DOWN and not w[2]): STEIN[1] += 1;
+            elif (e.key == pg.K_LEFT and not w[3]): STEIN[0] -= 1;
+            elif (e.key == pg.K_0): STEIN = [0, 0];
             render();
         else: continue;
             
