@@ -2,10 +2,12 @@ from typing import *
 import pygame as pg;
 from maze import Maze;
 
-DIM = (20, 10);
+DIM = (10, 10);
 FELDBREITE = 20;
 WANDBREITE = 10;
 FENSTER = ((FELDBREITE + WANDBREITE) * DIM[0] + WANDBREITE, (FELDBREITE + WANDBREITE) * DIM[1] + WANDBREITE);
+FOOTER = 20;
+
 HGFARBEN = ("#ec4545", "#4caf50");
 WANDFARBE = "#000000";
 STEINFARBE = "#4caf50";
@@ -13,20 +15,7 @@ EXITFARBE = "#ffffff";
 FOODFARBE = "#ffd918"; # Hintergrundfarbe von YAMMIE
 YAMMIE = pg.transform.smoothscale(pg.image.load("yammie.png"), (min(*FENSTER), min(*FENSTER)));
 
-
-class Stein_Position:
-    x = 0;
-    y = 5;
-    def __getitem__ (self, key: int):
-        if (key not in (0, 1)): raise TypeError("Key must be in (0, 1).");
-        else: return self.y if key else self.x;
-    def __iadd__ (self, other: Tuple[int, int]):
-        if (type(other) != tuple): raise TypeError("Only Tuples can be added to STEIN.");
-        else:
-            self.x += other[0];
-            self.y += other[1];
-
-screen = pg.display.set_mode(FENSTER);
+screen = pg.display.set_mode((FENSTER[0], FENSTER[1] + FOOTER));
 uhr = pg.time.Clock();
 weiter = True;
 gegessen = [];
@@ -85,6 +74,11 @@ def render ():
         pg.draw.rect(screen, STEINFARBE, (*feld2pos(STEIN), FELDBREITE, FELDBREITE));
         # Ausgang
         pg.draw.rect(screen, EXITFARBE, (*feld2pos(maze.exit), FELDBREITE, FELDBREITE));
+
+    font = pg.font.SysFont("times", int(FOOTER * 0.75));
+    text = font.render(f"  Pos: {STEIN[0]}x{STEIN[1]}    Food: {len(gegessen)}/{len(gegessen) + len(maze.food)}", True, "#eeeeee", "#444444");
+    pg.draw.rect(screen, "#444444", (0, FENSTER[1], FENSTER[0], FOOTER));
+    screen.blit(text, (0, FENSTER[1] + FOOTER * 0.125))
 
     pg.display.flip();
 
