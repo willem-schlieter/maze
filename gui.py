@@ -1,8 +1,8 @@
 import pygame as pg;
 from maze import Maze;
 
-DIM = (30, 30);
-FELDBREITE = 30;
+DIM = (30, 20);
+FELDBREITE = 20;
 WANDBREITE = 10;
 WANDFARBE = "#000000";
 FENSTER = ((FELDBREITE + WANDBREITE) * DIM[0] + WANDBREITE, (FELDBREITE + WANDBREITE) * DIM[1] + WANDBREITE);
@@ -49,7 +49,6 @@ def render ():
     pg.display.flip();
 
 pg.init()
-print(repr(maze));
 render()
 
 while weiter:
