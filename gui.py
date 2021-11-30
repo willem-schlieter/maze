@@ -2,17 +2,17 @@ from typing import *
 import pygame as pg;
 from maze import Maze;
 
-DIM = (5, 5);
+DIM = (20, 10);
 FELDBREITE = 20;
 WANDBREITE = 10;
+FENSTER = ((FELDBREITE + WANDBREITE) * DIM[0] + WANDBREITE, (FELDBREITE + WANDBREITE) * DIM[1] + WANDBREITE);
 HGFARBEN = ("#ec4545", "#4caf50");
 WANDFARBE = "#000000";
 STEINFARBE = "#4caf50";
 EXITFARBE = "#ffffff";
-FOODFARBE = "#ffff00";
-FENSTER = ((FELDBREITE + WANDBREITE) * DIM[0] + WANDBREITE, (FELDBREITE + WANDBREITE) * DIM[1] + WANDBREITE);
+FOODFARBE = "#ffd918"; # Hintergrundfarbe von YAMMIE
+YAMMIE = pg.transform.smoothscale(pg.image.load("yammie.png"), (min(*FENSTER), min(*FENSTER)));
 
-YAMMIE = pg.transform.smoothscale(pg.image.load("yammie.png"), (min(*FENSTER), min(*FENSTER)))
 
 class Stein_Position:
     x = 0;
@@ -33,7 +33,7 @@ gegessen = [];
 
 maze = Maze(DIM[0], DIM[1], True);
 STEIN = list(maze.entry);
-maze.create_food(4);
+maze.create_food(10);
 
 render_count = 0;
 
@@ -88,8 +88,8 @@ def render ():
 
     pg.display.flip();
 
-pg.init()
-render()
+pg.init();
+render();
 
 while weiter:
     uhr.tick(40)
@@ -104,11 +104,10 @@ while weiter:
                 elif (e.key == pg.K_LEFT and not w[3]): STEIN[0] -= 1;
                 if (tuple(STEIN) in maze.food):
                     gegessen.append(maze.food.pop(maze.food.index(tuple(STEIN))));
-                    render();
+                    screen.fill(FOODFARBE);
                     screen.blit(YAMMIE, ((FENSTER[0] - min(*FENSTER)) / 2, (FENSTER[1] - min(*FENSTER)) / 2))
                     pg.display.flip();
-                    pg.time.wait(1000);
-
+                    pg.time.wait(400);
             elif (e.key == pg.K_0): STEIN = maze.entry;
             render();
         else: continue;
