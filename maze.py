@@ -6,6 +6,8 @@ class Maze:
         self.y = y
         self.hw = [[False for j in range(self.x)] for i in range(self.y - 1)]                       # Erstellung der Matrix für horizontale Wände
         self.vw = [[False for j in range(self.y)] for i in range(self.x - 1)]                       # vertikale Wände
+        self.entry = (0, 0);
+        self.exit = (x - 1, y - 1);
         if (fill):                                                                                  # optionales Füllen des Labyrinthes
             self.recreate()
 
@@ -67,6 +69,12 @@ class Maze:
             a += "--+"
         return a
         
+    def __eq__(self, other):
+        if (type(other) == type(self)):
+            return self.hw == other.hw and self.vw == other.vw;
+        else:
+            return NotImplemented;
+
     def shortest_way(self, a: tuple, b: tuple, n: tuple = None) -> int:
         if (a[0] not in range(self.x) or a[1] not in range(self.y)):
             raise IndexError('The given point A does not exist in the maze.')
@@ -132,8 +140,11 @@ class Maze:
                 self.vw[x - 1][y] if x else True
             );
 
-    def __eq__(self, other):
-        if (type(other) == type(self)):
-            return self.hw == other.hw and self.vw == other.vw;
-        else:
-            return NotImplemented;
+    def rnd_field(self):
+        return (random.randrange(self.x), random.randrange(self.x));
+
+    def create_food(self, count: int):
+        for _ in range(count): self.food.append(self.rnd_field())
+
+    food = [];
+
