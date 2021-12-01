@@ -8,6 +8,7 @@ class Maze:
         self.vw = [[False for j in range(self.y)] for i in range(self.x - 1)]                       # vertikale Wände
         self.entry = (0, 0);
         self.exit = (x - 1, y - 1);
+        self.food = [];
         if (fill):                                                                                  # optionales Füllen des Labyrinthes
             self.recreate()
 
@@ -143,8 +144,8 @@ class Maze:
     def rnd_field(self):
         return (random.randrange(self.x), random.randrange(self.x));
 
-    def create_food(self, count: int):
-        for _ in range(count): self.food.append(self.rnd_field())
-
-    food = [];
+    def mkfood(self, count: int):
+        while len(self.food) < count:
+            f = self.rnd_field();
+            if (f != self.entry and f != self.exit and f not in self.food): self.food.append(f);
 
