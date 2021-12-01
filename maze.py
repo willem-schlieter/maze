@@ -145,6 +145,7 @@ class Maze:
         return (random.randrange(self.x), random.randrange(self.x));
 
     def mkfood(self, count: int):
+        if (count + 2 > (self.x * self.y)): raise ValueError("Too much food!");
         while len(self.food) < count:
             f = self.rnd_field();
             if (f != self.entry and f != self.exit and f not in self.food): self.food.append(f);
