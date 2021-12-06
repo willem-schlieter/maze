@@ -3,16 +3,20 @@ import pygame as pg
 from maze import Maze as Model;
 from maze_display import Maze;
 import style;
+import help_display as helpmod;
 pg.init();
 
 DIM = (10, 10);
 FOOD_COUNT = 1;
 
+ICON = pg.image.load("yammie.png");
 render_count = 0;
 pfeiltasten = (pg.K_UP, pg.K_RIGHT, pg.K_DOWN, pg.K_LEFT);
-pg.display.set_icon(style.ICON);
+# pg.display.set_icon(ICON);
 
-STATE = "STD"; # STD | YAMMIE
+FONT = pg.font.SysFont(*style.FONT);
+
+STATE = "STD"; # STD | YAMMIE | HELP
 TEXT = "";
 
 def update_std_text () -> str:
@@ -38,9 +42,11 @@ def render (state: str = "", text: str = "") -> None:
         MAIN.fill(style.F_FOOD);
         MAIN.blit(YAMMIE, ((FENSTER[0] - min(*FENSTER)) / 2, (FENSTER[1] - min(*FENSTER)) / 2));
         TEXT = "YAMMIE!";
+    elif (STATE == "HELP"):
+        MAIN.blit(helpmod.render((FENSTER[0], FENSTER[1] - style.S_FOOT)), (0, 0));
     else: raise ValueError("Invalid render state: " + str(STATE));
 
-    tsf = style.FONT.render(TEXT, True, "#eeeeee", "#444444");
+    tsf = FONT.render(TEXT, True, "#eeeeee", "#444444");
     pg.draw.rect(SCREEN, "#444444", (0, FENSTER[1] - style.S_FOOT, FENSTER[0], style.S_FOOT));
     blit(SCREEN, tsf, y = FENSTER[1] - (style.S_FOOT * 0.9));
 
@@ -105,7 +111,7 @@ def init_size (r: bool = True):
     FENSTER = (max(maze.grössen[0] + style.MIN_MARGIN, style.MIN_WIDTH), max(maze.grössen[1] + style.MIN_MARGIN, style.MIN_HEIGHT) + style.S_FOOT);
     SCREEN = pg.display.set_mode(FENSTER);
     MAIN = pg.Surface((FENSTER[0], FENSTER[1] - style.S_FOOT));
-    YAMMIE = pg.transform.smoothscale(style.ICON, (min(*FENSTER), min(*FENSTER)));
+    YAMMIE = pg.transform.smoothscale(ICON, (min(*FENSTER), min(*FENSTER)));
     if r: render();
     # print(f'mazeSF: {maze.grössen[0]}, echt: {maze.surface.get_width()}   FENSTER: {FENSTER[0]}, echt: {SCREEN.get_width()}');
     # print(f'FELD: {style.S_FELD}  WAND: {style.S_WAND()}');
@@ -130,7 +136,6 @@ while weiter:
     for e in pg.event.get():
         if (e.type == pg.QUIT): weiter = False;
         elif (e.type == pg.KEYDOWN):
-            print("KEYDOWN " + str(e.key))
             if (e.key in pfeiltasten):     # PFEILTASTE
                 result = maze.step(pfeiltasten.index(e.key));
                 if (result[1]):
