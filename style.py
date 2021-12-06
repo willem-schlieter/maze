@@ -8,6 +8,8 @@ F_WAND = "#000000"
 F_ST = "#4caf50"
 F_EX = "#ffffff"
 F_FOOD = "#ffd918" # Hintergrundfarbe vom "Yammie"-Bild
+F_HELP_HG = "#ccffbb";
+F_HELP_FG = "#333333";
 
 S_FELD = 20
 # nimmt die Feldanzahl der längeren Maze-Seite entgegen
@@ -24,5 +26,7 @@ MIN_WIDTH = 400;
 MIN_HEIGHT = 400;
 MIN_MARGIN = 20;
 
-FONT = pg.font.SysFont("times", int(S_FOOT * 0.75));
-ICON = pg.image.load("yammie.png");
+FONT = ("times", int(S_FOOT * 0.75));
+
+HELP_X_BUFFER = 10;
+HELP_Y_BUFFER = 10;
