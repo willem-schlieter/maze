@@ -1,4 +1,14 @@
-import random
+import random;
+from typing import *
+
+DOOR_COUNT = lambda len : 1 if len < 3 else random.randrange(1, 3) if len < 5 else random.randrange(1, 4);                                                                        # gibt Anzahl der Türen an, abhängig von der Länge der Wand, zB: "lambda len : 1 if len < 3 else random.randrange(1, 3)"
+
+# DIM_CRIT gibt an, nach welchem Kriterium die Dimension einer Wand festgelegt wird.
+#   RAND = zufällig (50% / 50%)
+#   PROP = zufällig, aber je größer x im Verhältnis zu y,
+#       desto wahrscheinlicher ist eine vertikale Wand
+#   STRICT = vertikal, wenn x > y, sonst horizontal. bei x == y wie RAND.
+DIM_CRIT = "PROP";
 
 class Maze:
     def __init__(self, x: int, y: int, fill: bool = False):
@@ -21,7 +31,7 @@ class Maze:
         if (not empty):
             self.div((0, 0), self.x, self.y)
 
-    def div(self, pos: tuple, x: int, y: int):
+    def div(self, pos: Tuple[int, int], x: int, y: int):
         if (pos[0] not in range(self.x) or pos[1] not in range(self.y)):
             raise IndexError('Position out of range of the maze.')
         if (x < 1 or y < 1):
@@ -29,23 +39,29 @@ class Maze:
         if (pos[0] + x > self.x or pos[1] + y > self.y):
             raise IndexError('Given area is too big.')
 
-        if (x == 1 or y == 1):
+        if (x == 1 or y == 1):                                                                      # Zelle zu klein
             pass
         else:
-            if (random.randrange(x + y - 2) < x - 1):                                               # vertikale Wand
-                door = random.randrange(y) + pos[1]
+            if (
+                DIM_CRIT == "PROP" and random.randrange(x + y - 2) < x - 1 or
+                DIM_CRIT == "STRICT" and x > y or
+                (DIM_CRIT == "RAND" or x == y) and random.randrange(2)
+            ):                                                                                      # vertikale Wand
+                door = [];
+                for i in range(DOOR_COUNT(y)): door.append(random.randrange(y) + pos[1]);           # Türen hinzufügen
                 wall = random.randrange(x - 1)
                 for i in range(pos[1], pos[1] + y):                                                 # alle Einträge in der vertikalen Wand
-                    if (i != door):
+                    if (i not in door):
                         self.vw[wall + pos[0]][i] = True                                            # auf True setzen
                 self.div(pos, wall + 1, y)                                                          # Rekursion mit linkem Teilbereich
                 self.div((pos[0] + wall + 1, pos[1]), x - wall - 1, y)                              # Rekursion mit rechtem Teilbereich
             
             else:                                                                                   # horizontale Wand
-                door = random.randrange(x) + pos[0]
+                door = [];
+                for i in range(DOOR_COUNT(x)): door.append(random.randrange(x) + pos[0]);           # Türen hinzufügen
                 wall = random.randrange(y - 1)
                 for i in range(pos[0], pos[0] + x):                                                 # alle Einträge in der horizontalen Wand
-                    if (i != door):
+                    if (i not in door):
                         self.hw[wall + pos[1]][i] = True                                            # auf True setzen
                 self.div(pos, x, wall + 1)                                                          # Rekursion mit oberem Teilbereich
                 self.div((pos[0], pos[1] + wall + 1), x, y - wall - 1)                              # Rekursion mit unterem Teilbereich
