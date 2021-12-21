@@ -1,23 +1,23 @@
 from typing import *
 import pygame as pg
-from maze import Maze as Model;
-from maze_display import Maze;
-import style;
-import help_display as helpmod;
-pg.init();
+from maze import Maze as Model
+from maze_display import Maze
+import style
+import help_display as helpmod
+pg.init()
 
-DIM = (10, 10);
-FOOD_COUNT = 1;
+DIM = (10, 10)
+FOOD_COUNT = 1
 
-ICON = pg.image.load("yammie.png");
-render_count = 0;
-pfeiltasten = (pg.K_UP, pg.K_RIGHT, pg.K_DOWN, pg.K_LEFT);
-# pg.display.set_icon(ICON);
+ICON = pg.image.load("yammie.png")
+render_count = 0
+pfeiltasten = (pg.K_UP, pg.K_RIGHT, pg.K_DOWN, pg.K_LEFT)
+# pg.display.set_icon(ICON)
 
-FONT = pg.font.SysFont(*style.FONT);
+FONT = pg.font.SysFont(*style.FONT)
 
-STATE = "STD"; # STD | YAMMIE | HELP
-TEXT = "";
+STATE = "STD" # STD | YAMMIE | HELP
+TEXT = ""
 
 def update_std_text () -> str:
     global TEXT;
@@ -127,10 +127,10 @@ def help(start):
         uhr.tick(40);
         for e in pg.event.get(): weiter = not (e.type == pg.KEYDOWN and e.key == pg.K_RETURN);
 
-help(True);
-init();
+help(True)
+init()
 
-weiter = True;
+weiter = True
 while weiter:
     uhr.tick(40)
     for e in pg.event.get():
@@ -168,4 +168,4 @@ while weiter:
         else: continue;
 
 print(f'QUIT AFTER {render_count} RENDER CYCLES.')
-pg.quit();
+pg.quit()
