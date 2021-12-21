@@ -1,5 +1,6 @@
 import random
 from typing import *
+import json
 
 class Maze:
     def __init__(self, x: int, y: int, fill: bool = False):
@@ -177,30 +178,33 @@ class Maze:
         return farest[random.randrange(len(farest))]
 
     def save(self, path: str):
-        data = [boo for row in self.hw for boo in row] + [boo for row in self.vw for boo in row];
-        intarray = [self.x, self.y] + [int("".join([str(c) for c in a]), 2) for a in [[int(data.pop(0)) for j in range(8) if data] for i in range(0, len(data), 8)]];
-        print(intarray)
-        f = open(path, "wb");
-        f.write(bytes(intarray));
-        f.close();
+        dic = {
+            "size": (self.x, self.y),
+            "dim_crit": self.dim_crit,
+            "door_perc": self.door_perc,
+            "entry": self.entry,
+            "exit": self.exit,
+            "hw": self.hw,
+            "vw": self.vw,
+            "food": self.food            
+        }
+        f = open(path, "w")
+        f.write(json.dumps(dic))
+        f.close()
 
-    def from_file(path):
-        if (type(path) == Maze): raise TypeError("from_file is a static method.");
-        f = open(path, "rb");
-        intarray = list(f.read());
-        print(intarray)
-        f.close();
-
-        maze = Maze(intarray.pop(0), intarray.pop(0), False);
-
-        data = [item for sublist in [[bool(int(n)) for n in list(bin(i)[2:])] for i in intarray] for item in sublist];
-        while (len(data) < ((maze.x - 1) * maze.y + (maze.y - 1) * maze.x)):
-            data.insert(False, 0)
-        print(data);
-
-        maze.hw = [[bool(data.pop(0)) for i in range(maze.y) if data] for i in range(maze.x - 1)];
-        maze.vw = [[bool(data.pop(0)) for i in range(maze.x) if data] for i in range(maze.y - 1)];
-        return maze;
+    def load(self, path):
+        f = open(path, "r")
+        dic = json.loads(f.read())
+        f.close()
+        (self.x, self.y) = dic["size"]
+        self.dim_crit = dic["dim_crit"]
+        self.door_perc = dic["door_perc"]
+        self.entry = dic["entry"]
+        self.exit = dic["exit"]
+        self.hw = dic["hw"]
+        self.vw = dic["vw"]
+        self.food = dic["food"]
+        return self
 
     # Nimmt die Position eines Feldes und einen int "dir" entgegen und gibt an, ob in der angegebenen Richtung von dem Feld aus eine Wand ist. dir: (oben=0, links=1, unten=2, rechts=3)
     def is_wall(self, pos: Tuple[int, int], dir: int) -> bool:
