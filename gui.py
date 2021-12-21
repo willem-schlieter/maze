@@ -108,7 +108,7 @@ def init():
 def init_size (r: bool = True):
     global SCREEN, FENSTER, MAIN, YAMMIE;
     maze.init_size();
-    FENSTER = (max(maze.grössen[0] + style.MIN_MARGIN, style.MIN_WIDTH), max(maze.grössen[1] + style.MIN_MARGIN, style.MIN_HEIGHT) + style.S_FOOT);
+    FENSTER = (max(maze.groessen[0] + style.MIN_MARGIN, style.MIN_WIDTH), max(maze.groessen[1] + style.MIN_MARGIN, style.MIN_HEIGHT) + style.S_FOOT);
     SCREEN = pg.display.set_mode(FENSTER);
     MAIN = pg.Surface((FENSTER[0], FENSTER[1] - style.S_FOOT));
     YAMMIE = pg.transform.smoothscale(ICON, (min(*FENSTER), min(*FENSTER)));
