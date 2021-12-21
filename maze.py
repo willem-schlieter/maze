@@ -1,14 +1,16 @@
-import random;
+import random
 from typing import *
 
-DOOR_COUNT = lambda len : 1 if len < 3 else random.randrange(1, 3) if len < 5 else random.randrange(1, 4);                                                                        # gibt Anzahl der Türen an, abhängig von der Länge der Wand, zB: "lambda len : 1 if len < 3 else random.randrange(1, 3)"
+# gibt Anzahl der Türen an, abhängig von der Länge der Wand, zB: "lambda len : 1 if len < 3 else random.randrange(1, 3)"
+DOOR_COUNT = lambda len : 1 if len < 3 else random.randrange(1, 3) if len < 5 else random.randrange(1, 4)
+# DOOR_COUNT = lambda len : 1
 
 # DIM_CRIT gibt an, nach welchem Kriterium die Dimension einer Wand festgelegt wird.
 #   RAND = zufällig (50% / 50%)
 #   PROP = zufällig, aber je größer x im Verhältnis zu y,
 #       desto wahrscheinlicher ist eine vertikale Wand
 #   STRICT = vertikal, wenn x > y, sonst horizontal. bei x == y wie RAND.
-DIM_CRIT = "PROP";
+DIM_CRIT = "PROP"
 
 class Maze:
     def __init__(self, x: int, y: int, fill: bool = False):
@@ -47,8 +49,8 @@ class Maze:
                 DIM_CRIT == "STRICT" and x > y or
                 (DIM_CRIT == "RAND" or x == y) and random.randrange(2)
             ):                                                                                      # vertikale Wand
-                door = [];
-                for i in range(DOOR_COUNT(y)): door.append(random.randrange(y) + pos[1]);           # Türen hinzufügen
+                door = []
+                for i in range(DOOR_COUNT(y)): door.append(random.randrange(y) + pos[1])            # Türen hinzufügen
                 wall = random.randrange(x - 1)
                 for i in range(pos[1], pos[1] + y):                                                 # alle Einträge in der vertikalen Wand
                     if (i not in door):
@@ -57,8 +59,8 @@ class Maze:
                 self.div((pos[0] + wall + 1, pos[1]), x - wall - 1, y)                              # Rekursion mit rechtem Teilbereich
             
             else:                                                                                   # horizontale Wand
-                door = [];
-                for i in range(DOOR_COUNT(x)): door.append(random.randrange(x) + pos[0]);           # Türen hinzufügen
+                door = []
+                for i in range(DOOR_COUNT(x)): door.append(random.randrange(x) + pos[0])            # Türen hinzufügen
                 wall = random.randrange(y - 1)
                 for i in range(pos[0], pos[0] + x):                                                 # alle Einträge in der horizontalen Wand
                     if (i not in door):
@@ -92,7 +94,7 @@ class Maze:
         else:
             return NotImplemented;
 
-    def shortest_way(self, a: tuple, b: tuple, n: tuple = None) -> int:
+    def shortest_way_BAK(self, a: tuple, b: tuple, n: tuple = None) -> int:
         if (a[0] not in range(self.x) or a[1] not in range(self.y)):
             raise IndexError('The given point A does not exist in the maze.')
         if (b[0] not in range(self.x) or b[1] not in range(self.y)):
@@ -119,6 +121,21 @@ class Maze:
                 if (d > 0):
                     return d
             return -1
+
+    def shortest_way(self, a: tuple, b: tuple) -> int:
+        matrix = [[0 for i in range(self.x)] for i in range(self.y)]
+        matrix[a[0]][a[1]] = 1
+        i = 1
+        while (not matrix[b[0]][b[1]]):
+            for i_1 in range(self.x):
+                for i_2 in range(self.y):
+                    if (matrix[i_1][i_2] == i):
+                        if (not self.is_wall((i_1, i_2), 0) and not matrix[i_1][i_2 - 1]): matrix[i_1][i_2 - 1] = i + 1
+                        if (not self.is_wall((i_1, i_2), 1) and not matrix[i_1 + 1][i_2]): matrix[i_1 + 1][i_2] = i + 1
+                        if (not self.is_wall((i_1, i_2), 2) and not matrix[i_1][i_2 + 1]): matrix[i_1][i_2 + 1] = i + 1
+                        if (not self.is_wall((i_1, i_2), 3) and not matrix[i_1 - 1][i_2]): matrix[i_1 - 1][i_2] = i + 1
+            i += 1
+        return matrix[b[0]][b[1]] - 1
 
     def save(self, path: str):
         data = [boo for row in self.hw for boo in row] + [boo for row in self.vw for boo in row];
@@ -155,10 +172,23 @@ class Maze:
                 self.vw[x][y] if x + 1 < self.x else True,
                 self.hw[y][x] if y + 1 < self.y else True,
                 self.vw[x - 1][y] if x else True
-            );
+            )
+
+    # Nimmt die Position eines Feldes und einen int "dir" entgegen und gibt an, ob in der angegebenen Richtung von dem Feld aus eine Wand ist. dir: (oben=0, links=1, unten=2, rechts=3)
+    def is_wall(self, pos: Tuple[int, int], dir: int) -> bool:
+        if (pos[0] not in range(self.x) or pos[1] not in range(self.y)):
+            raise IndexError('The given field does not exist in the maze.')
+        elif (dir not in range(4)):
+            raise IndexError('"dir" out of range.')
+        else:
+            return not (
+                (dir == 0 and pos[1] != 0 and not self.hw[pos[1] - 1][pos[0]]) or
+                (dir == 1 and pos[0] != self.x - 1 and not self.vw[pos[0]][pos[1]]) or
+                (dir == 2 and pos[1] != self.y - 1 and not self.hw[pos[1]][pos[0]]) or
+                (dir == 3 and pos[0] != 0 and not self.vw[pos[0] - 1][pos[1]]))
 
     def rnd_field(self):
-        return (random.randrange(self.x), random.randrange(self.x));
+        return (random.randrange(self.x), random.randrange(self.y));
 
     def mkfood(self, count: int):
         if (count + 2 > (self.x * self.y)): raise ValueError("Too much food!");
