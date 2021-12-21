@@ -96,15 +96,15 @@ def new ():
         render();
 
 def init():
-    global maze, FENSTER, SCREEN, uhr, steps, YAMMIE, MAIN;
-    maze = Maze(Model(DIM[0], DIM[1], True));
-    maze.model.mkfood(FOOD_COUNT % ((DIM[0] * DIM[1]) - 1));
-    pg.display.set_caption(f'Maze {DIM[0]} x {DIM[1]}');
-    uhr = pg.time.Clock();
-    steps = 0;
-    update_std_text();
-    init_size(False);
-    render();
+    global maze, FENSTER, SCREEN, uhr, steps, YAMMIE, MAIN
+    maze = Maze(Model(DIM[0], DIM[1], True))
+    maze.model.mkfood(FOOD_COUNT % ((DIM[0] * DIM[1]) - 1))
+    pg.display.set_caption(f'Maze {DIM[0]} x {DIM[1]}')
+    uhr = pg.time.Clock()
+    steps = 0
+    update_std_text()
+    init_size(False)
+    render()
 def init_size (r: bool = True):
     global SCREEN, FENSTER, MAIN, YAMMIE;
     maze.init_size();
