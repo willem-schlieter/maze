@@ -15,11 +15,11 @@ class Maze:
         self.init_size()
     # Aufrufen, wenn sich die (gewünschte) Größe des Maze-Surface verändert
     def init_size (self):
-        self.grössen = (
+        self.groessen = (
             int((style.S_FELD + style.S_WAND()) * self.x + style.S_WAND()),
             int((style.S_FELD + style.S_WAND()) * self.y + style.S_WAND())
         )
-        self.surface = pg.Surface(self.grössen)
+        self.surface = pg.Surface(self.groessen)
 
 
     def wand (self, x: int, y: int, h: bool, screen) -> None:
@@ -35,13 +35,13 @@ class Maze:
 
         # RÄNDER
         # oben
-        pg.draw.rect(self.surface, style.F_WAND, (0, 0, self.grössen[0], style.S_WAND()))
+        pg.draw.rect(self.surface, style.F_WAND, (0, 0, self.groessen[0], style.S_WAND()))
         # links
-        pg.draw.rect(self.surface, style.F_WAND, (0, 0, style.S_WAND(), self.grössen[1]))
+        pg.draw.rect(self.surface, style.F_WAND, (0, 0, style.S_WAND(), self.groessen[1]))
         # unten
-        pg.draw.rect(self.surface, style.F_WAND, (0, self.grössen[1] - style.S_WAND(), self.grössen[0], style.S_WAND()))
+        pg.draw.rect(self.surface, style.F_WAND, (0, self.groessen[1] - style.S_WAND(), self.groessen[0], style.S_WAND()))
         # rechts
-        pg.draw.rect(self.surface, style.F_WAND, (self.grössen[0] - style.S_WAND(), 0, style.S_WAND(), self.grössen[1]))
+        pg.draw.rect(self.surface, style.F_WAND, (self.groessen[0] - style.S_WAND(), 0, style.S_WAND(), self.groessen[1]))
 
         for y in range(self.y):
             for x in range(self.x):
