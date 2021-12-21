@@ -33,6 +33,8 @@ class Maze:
         self.vw = [[False for j in range(self.y)] for i in range(self.x - 1)]                       # vertikale Wände
         if (not empty):
             self.div((0, 0), self.x, self.y)
+            self.exit = self.farest_field(self.entry)
+        return self
 
     def div(self, pos: Tuple[int, int], x: int, y: int):
         if (pos[0] not in range(self.x) or pos[1] not in range(self.y)):
@@ -77,10 +79,10 @@ class Maze:
             a += "--+"
         a += "\n"
         for i in range(self.y):                                                                     # je zwei Zeilen
-            a += "|  "
+            a += "|" + ("<>" if (0, i) in self.food else "  ")
             for j in range(self.x - 1):                                                             # vertikale Wände in dieser Zeile
                 a += "|" if self.vw[j][i] else " "
-                a += "  "
+                a += ("<>" if (j + 1, i) in self.food else "  ")
             a += "|\n+"                                                                             # Zeilenende
             if (i < self.y - 1):                                                                    # nicht in der letzten Iteration, da weniger Zeilen als Spalten (Einträge)
                 for j in range(self.x):                                                             # horizontale Wände in dieser Zeile
@@ -96,6 +98,25 @@ class Maze:
             return self.hw == other.hw and self.vw == other.vw;
         else:
             return NotImplemented;
+
+    def __add__(self, other):
+        if (type(other) != type(self)):
+            raise TypeError("Both operands must be Mazes.")
+        elif (self.y != other.y):
+            raise ValueError("Mazes must have the same 'y'.")
+        else:
+            m = Maze(self.x + other.x, self.y)
+            m.door_perc = (self.door_perc + other.door_perc) / 2
+            trennwand = [True for i in range(self.y)]
+            for i in range(int(m.door_perc * (self.y - 1) / 100) + 1):
+                trennwand[random.randrange(len(trennwand))] = False
+            m.vw = [*self.vw, trennwand, *other.vw]
+            m.hw = [self.hw[i] + other.hw[i] for i in range(self.y - 1)]
+            m.entry = (0, 0)
+            m.exit = m.farest_field(m.entry)
+            m.food = [*self.food, *[(f[0] + self.x, f[1]) for f in other.food]]
+
+        return m
 
     def shortest_way_BAK(self, a: tuple, b: tuple, n: tuple = None) -> int:
         if (a[0] not in range(self.x) or a[1] not in range(self.y)):
@@ -202,4 +223,5 @@ class Maze:
         while len(self.food) < count:
             f = self.rnd_field()
             if (f != self.entry and f != self.exit and f not in self.food): self.food.append(f)
+        return self
 
