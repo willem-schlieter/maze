@@ -1,4 +1,8 @@
 # maze
+
+This is an old project containing a little maze game in python. To run locally, `pip install pygame` and then run with with `python gui.py`. The game is in German.
+
+---
 Dies ist ein Projekt von willem-schlieter und 12Enzo04. Programmiert ist es in Python 3.
 
 Dieses Projekt enthält keinerlei kopergeschützten Werke oder anderweitig rechtlich geschützte Werke. Allerdings ist der Code von zwei Anfängern geschrieben,
